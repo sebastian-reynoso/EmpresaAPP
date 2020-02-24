@@ -1,0 +1,95 @@
+﻿@model IEnumerable<EmpresaWEB.Models.mvcPaquete>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Paquetes</h2>
+
+<br />
+<p>
+    <a href="@Url.Action("AddOrEdit","Paquetes")" class="btn btn-default"><i class="fa fa-plus"></i> Crear Nuevo</a>
+</p>
+<table class="table table-striped">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PaqueteId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subtitulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Restricciones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaFin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th> Opciones</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaqueteId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Subtitulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Restricciones)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                <a href="@Url.Action("AddOrEdit", "Paquetes", new { id = item.PaqueteId })" class="btn btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                <a onclick="Delete(@item.PaqueteId)" class="btn btn-default"><i class="fas fa-trash-alt"></i> Eliminar</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@section scripts{
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este paquete?', function () {
+                window.location.href = '@Url.Action("Delete","Paquetes")/' + id;
+            }, null);
+        }
+    </script>
+}
+

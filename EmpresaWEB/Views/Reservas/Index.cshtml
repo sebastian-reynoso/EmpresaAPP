@@ -1,0 +1,96 @@
+﻿@model IEnumerable<EmpresaWEB.Models.mvcReserva>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Reservas</h2>
+
+<br />
+<p>
+    <a href="@Url.Action("AddOrEdit","Reservas")" class="btn btn-default"><i class="fa fa-plus"></i> Crear Nuevo</a>
+</p>
+<table class="table table-striped">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservaId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Paquete.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Paquete.Subtitulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaRegistro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPago)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th> Opciones</th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.ReservaId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Usuario.Apellido)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Paquete.Titulo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Paquete.Subtitulo)
+    </td>
+    
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaRegistro)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaPago)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Estado)
+    </td>
+    <td>
+        <a href="@Url.Action("AddOrEdit", "Reservas", new { id = item.ReservaId })" class="btn btn-default"><i class="fa fa-pencil"></i> Editar</a>
+        <a onclick="Delete(@item.ReservaId)" class="btn btn-default"><i class="fas fa-trash-alt"></i> Eliminar</a>
+    </td>
+</tr>
+    }
+
+</table>
+
+@section scripts{
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar esta reserva?', function () {
+                window.location.href = '@Url.Action("Delete","Reservas")/' + id;
+            }, null);
+        }
+    </script>
+}
+

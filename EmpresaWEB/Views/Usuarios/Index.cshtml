@@ -1,0 +1,85 @@
+﻿@model IEnumerable<EmpresaWEB.Models.mvcUsuario>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Usuarios</h2>
+<br />
+<p>
+    <a href="@Url.Action("AddOrEdit","Usuarios")" class="btn btn-default"><i class="fa fa-plus"></i> Crear Nuevo</a>
+</p>
+<table class="table table-striped">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contraseña) 
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rol)
+            </th>
+            <th>
+                Opciones
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.Raw("\u2022\u2022\u2022\u2022\u2022")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rol)
+            </td>
+            <td>
+                <a href="@Url.Action("AddOrEdit", "Usuarios", new { id = item.UsuarioId })" class="btn btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                <a onclick="Delete(@item.UsuarioId)" class="btn btn-default"><i class="fas fa-trash-alt"></i> Eliminar</a>
+            </td>
+        </tr>
+    }
+
+</table>
+@section scripts{
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este usuario?', function () {
+                window.location.href = '@Url.Action("Delete","Usuarios")/' + id;
+            }, null);
+        }
+    </script>
+}
+
+

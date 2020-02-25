@@ -45,7 +45,7 @@ namespace EmpresaAPI.Controllers
             
             if (isCredentialValid)
             {
-                var token = TokenGenerator.GenerateTokenJwt(login.Correo);
+                var token = TokenGenerator.GenerateTokenJwt(login.Correo);                
                 return Ok(token);
             }
             else

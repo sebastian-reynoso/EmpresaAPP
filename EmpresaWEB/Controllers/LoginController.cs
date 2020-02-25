@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using EmpresaWEB.Models;
+using Newtonsoft.Json;
 
 namespace EmpresaWEB.Controllers
 {
@@ -13,13 +14,20 @@ namespace EmpresaWEB.Controllers
         // GET: Login
         public ActionResult Index()
         {
-            return View();
+            return View(new mvcLogin());
         }
 
-        public ActionResult Send(mvcLogin login)
+        [HttpPost]
+        public ActionResult Send(string Correo, string Contraseña)
         {
-            HttpResponseMessage response = GlobalVariables.WebApiClient.PostAsJsonAsync("api/Login/authentication", login).Result;
-            return View(response);
+            mvcLogin login = new mvcLogin();
+            login.Correo = Correo;
+            login.Contraseña = Contraseña;
+            HttpResponseMessage response = GlobalVariables.WebApiClient.PostAsJsonAsync("api/Login/authenticate", login).Result;
+            var jsonString = response.Content.ReadAsStringAsync();
+            jsonString.Wait();
+            ViewBag.message = "Bearer " + jsonString.Result;
+            return View();
         }
     }
 }   

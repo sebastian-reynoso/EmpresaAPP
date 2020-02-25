@@ -35,6 +35,7 @@ namespace EmpresaAPI.Controllers
                 signingCredentials: signingCredentials);
 
             var jwtTokenString = tokenHandler.WriteToken(jwtSecurityToken);
+            
             return jwtTokenString;
         }
     }

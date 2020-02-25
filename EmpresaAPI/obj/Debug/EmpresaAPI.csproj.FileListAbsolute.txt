@@ -274,7 +274,7 @@ D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\bin\System.Web.WebPa
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\bin\System.Web.WebPages.Razor.xml
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\bin\Antlr3.Runtime.pdb
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\obj\Debug\EmpresaAPI.csprojAssemblyReference.cache
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\obj\Debug\EmpresaAPI.csproj.CopyComplete
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\obj\Debug\EmpresaAPI.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\obj\Debug\EmpresaAPI.pdb
+D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaAPI\obj\Debug\EmpresaAPI.csprojAssemblyReference.cache

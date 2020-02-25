@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -82,6 +84,32 @@ namespace EmpresaAPI.Controllers
                 if (DateTime.UtcNow < expires) return true;
             }
             return false;
+        }
+
+        public static ClaimsPrincipal GetPrincipal(string token)
+        {
+            try
+            {
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = (JwtSecurityToken)tokenHandler.ReadToken(token);
+                if (jwtToken == null)
+                    return null;
+                byte[] key = Convert.FromBase64String(ConfigurationManager.AppSettings["JWT_SECRET_KEY"]);
+                TokenValidationParameters parameters = new TokenValidationParameters()
+                {
+                    RequireExpirationTime = true,
+                    ValidateIssuer = false,
+                    ValidateActor = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+                SecurityToken securityToken;
+                ClaimsPrincipal principal = tokenHandler.ValidateToken(token, parameters, out securityToken);
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

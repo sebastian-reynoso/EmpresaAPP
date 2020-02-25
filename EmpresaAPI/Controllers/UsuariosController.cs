@@ -12,11 +12,13 @@ using EmpresaAPI.Models;
 
 namespace EmpresaAPI.Controllers
 {
+
     [Authorize]
     public class UsuariosController : ApiController
     {
         private DBModel db = new DBModel();
 
+        
         // GET: api/Usuarios
         public IQueryable<Usuario> GetUsuarios()
         {

@@ -158,6 +158,7 @@ C:\.Empresa y Otros\SReynoso\net framework\EmpresaAPI\EmpresaWEB\obj\Debug\Empre
 C:\.Empresa y Otros\SReynoso\net framework\EmpresaAPI\EmpresaWEB\obj\Debug\EmpresaWEB.csproj.CopyComplete
 C:\.Empresa y Otros\SReynoso\net framework\EmpresaAPI\EmpresaWEB\obj\Debug\EmpresaWEB.dll
 C:\.Empresa y Otros\SReynoso\net framework\EmpresaAPI\EmpresaWEB\obj\Debug\EmpresaWEB.pdb
+D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\EmpresaWEB.dll.config
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\EmpresaWEB.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\EmpresaWEB.pdb
@@ -172,7 +173,6 @@ D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CodeAnalysis.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
-D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.CSharp.Core.targets
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 D:\_SEBASTIAN\proyectos\net framework\EmpresaAPP\EmpresaWEB\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll

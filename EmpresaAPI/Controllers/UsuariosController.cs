@@ -26,6 +26,7 @@ namespace EmpresaAPI.Controllers
         }
 
         // GET: api/Usuarios/5
+       
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult GetUsuario(int id)
         {
@@ -39,6 +40,7 @@ namespace EmpresaAPI.Controllers
         }
 
         // PUT: api/Usuarios/5
+        
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUsuario(int id, Usuario usuario)
         {
@@ -74,6 +76,7 @@ namespace EmpresaAPI.Controllers
         }
 
         // POST: api/Usuarios
+        
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult PostUsuario(Usuario usuario)
         {
@@ -89,6 +92,7 @@ namespace EmpresaAPI.Controllers
         }
 
         // DELETE: api/Usuarios/5
+       
         [ResponseType(typeof(Usuario))]
         public IHttpActionResult DeleteUsuario(int id)
         {

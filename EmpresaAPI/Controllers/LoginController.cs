@@ -37,11 +37,11 @@ namespace EmpresaAPI.Controllers
             if (login == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            //TODO: Validate credentials Correctly, this code is only for demo !!
+            
             Usuario usuario = db.Usuarios.SingleOrDefault(d => d.Correo == login.Correo);
             bool isCredentialValid = false;
             if (usuario != null)
-                isCredentialValid = (login.Contraseña == usuario.Contraseña);
+                isCredentialValid = (login.Contraseña == usuario.Contraseña);       
             
             if (isCredentialValid)
             {

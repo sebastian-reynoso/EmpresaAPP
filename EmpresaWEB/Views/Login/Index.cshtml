@@ -25,6 +25,9 @@
     <link rel="stylesheet" type="text/css" href="~/Content/Login/css/util.css">
     <link rel="stylesheet" type="text/css" href="~/Content/Login/css/main.css">
     <!--===============================================================================================-->
+    <script src="https://kit.fontawesome.com/c65d01b037.js" crossorigin="anonymous"></script>
+    <link href="~/Content/alertifyjs/alertify.min.css" rel="stylesheet" />
+    <link href="~/Content/alertifyjs/themes/default.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -37,47 +40,47 @@
 
                 @using (Html.BeginForm("Send", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form" }))
                 {
-                        <span class="login100-form-title">
-                            Login
+                    <span class="login100-form-title">
+                        Login
+                    </span>
+
+                    <div class="wrap-input100 validate-input" data-validate="Se requiere un email valido: ex@abc.xyz">
+                        @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "input100", type = "email", placeholder = "Correo", name = "Correo" } })
+                        <!--- <input class="input100" type="text" name="email" placeholder="Email">-->
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
                         </span>
+                    </div>
 
-                        <div class="wrap-input100 validate-input" data-validate="Se requiere un email valido: ex@abc.xyz">
-                            @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "input100", type = "email", placeholder = "Correo", name="Correo" } })
-                            <!--- <input class="input100" type="text" name="email" placeholder="Email">-->
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                            </span>
-                        </div>
+                    <div class="wrap-input100 validate-input" data-validate="Se requiere contraseña">
+                        @Html.EditorFor(model => model.Contraseña, new { htmlAttributes = new { @class = "input100", placeholder = "Contraseña", Type = "password", name = "Contraseña" } })
+                        <!-- <input class="input100" type="password" name="pass" place  holder="Password">-->
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
 
-                        <div class="wrap-input100 validate-input" data-validate="Se requiere contraseña">
-                            @Html.EditorFor(model => model.Contraseña, new { htmlAttributes = new { @class = "input100", placeholder = "Contraseña", Type = "password" , name="Contraseña"} })
-                            <!-- <input class="input100" type="password" name="pass" place  holder="Password">-->
-                            <span class="focus-input100"></span>
-                            <span class="symbol-input100">
-                                <i class="fa fa-lock" aria-hidden="true"></i>
-                            </span>
-                        </div>
+                    <div class="container-login100-form-btn">
+                        <input type="submit" value="Login" class="login100-form-btn" />
+                    </div>
 
-                        <div class="container-login100-form-btn">
-                            <input type="submit" value="Login" class="login100-form-btn" />
-                        </div>
+                    <div class="text-center p-t-12">
+                        <span class="txt1">
+                            <!--Forgot-->
+                        </span>
+                        <a class="txt2" href="#">
+                            <!--Username / Password?-->
+                        </a>
+                    </div>
 
-                        <div class="text-center p-t-12">
-                            <span class="txt1">
-                                <!--Forgot-->
-                            </span>
-                            <a class="txt2" href="#">
-                                <!--Username / Password?-->
-                            </a>
-                        </div>
-
-                        <div class="text-center p-t-136">
-                            <a class="txt2" href="#">
-                                <!--Create your Account
-                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>-->
-                            </a>
-                        </div>
+                    <div class="text-center p-t-136">
+                        <a class="txt2" href="#">
+                            <!--Create your Account
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>-->
+                        </a>
+                    </div>
                 }
             </div>
         </div>
@@ -102,6 +105,29 @@
     </script>
     <!--===============================================================================================-->
     <script src="~/Content/Login/js/main.js"></script>
+    <script src="~/Scripts/alertify.min.js"></script>
 
 </body>
 </html>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+    @Scripts.Render("~/bundles/jquery");
+    @Scripts.Render("~/bundles/bootstrap");
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            var errorMessage = '@TempData["ErrorMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+            if (errorMessage != '')
+                alertify.error(errorMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este usuario?', function () {
+                window.location.href = '@Url.Action("Delete","Usuarios")/' + id;
+            }, null);
+        }
+    </script>
+}

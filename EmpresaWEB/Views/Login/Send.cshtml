@@ -3,9 +3,34 @@
     ViewBag.Title = "Send";
 }
 
+<head>
+    <link href="~/Content/alertifyjs/alertify.min.css" rel="stylesheet" />
+    <link href="~/Content/alertifyjs/themes/default.min.css" rel="stylesheet" />
+</head>
 <h2>Hi</h2>
 
 <body>
     <p>@ViewBag.message</p>
 </body>
 
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval");
+    <script>
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            var errorMessage = '@TempData["ErrorMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+            if (errorMessage != '')
+                alertify.error(errorMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este usuario?', function () {
+                window.location.href = '@Url.Action("Delete","Usuarios")/' + id;
+            }, null);
+        }
+    </script>
+}

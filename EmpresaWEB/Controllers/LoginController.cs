@@ -15,10 +15,15 @@ namespace EmpresaWEB.Controllers
 {
     public class LoginController : Controller
     {
-       
+        public bool message = false;
         // GET: Login
         public ActionResult Index()
         {
+            if (message == true)
+            {
+                TempData["ErrorMessage"] = "Correo o Contraseña Incorrecto";
+                message = false;
+            }
             return View(new mvcLogin());
         }
 
@@ -62,11 +67,19 @@ namespace EmpresaWEB.Controllers
                 var resultMessage = response.Content.ReadAsStringAsync().Result;
                 tokenBased = JsonConvert.DeserializeObject<string>(resultMessage);
                 Session["TokenNumber"] = tokenBased;
+                client.Dispose();
+                message = false;
+                ViewBag.message = "Bearer " + tokenBased;
+                return View();
             }
+            client.Dispose();
+            message = true;
+            return RedirectToAction("Index");
+
+            
 
 
-            ViewBag.message = "Bearer " + tokenBased;           
-            return View();
+            
         }
     }
 }   

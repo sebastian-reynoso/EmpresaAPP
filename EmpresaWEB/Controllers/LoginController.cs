@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using EmpresaWEB.Models;
 using Newtonsoft.Json;
@@ -19,11 +15,10 @@ namespace EmpresaWEB.Controllers
         // GET: Login
         public ActionResult Index()
         {
-            if (message == true)
-            {
-                TempData["ErrorMessage"] = "Correo o Contraseña Incorrecto";
-                message = false;
-            }
+            
+            TempData["ErrorMessage"] = "Correo o Contraseña Incorrecto";          
+
+            message = false;
             return View(new mvcLogin());
         }
 
@@ -75,10 +70,6 @@ namespace EmpresaWEB.Controllers
             client.Dispose();
             message = true;
             return RedirectToAction("Index");
-
-            
-
-
             
         }
     }

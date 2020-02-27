@@ -1,5 +1,5 @@
 ﻿@model EmpresaWEB.Models.mvcLogin
-@{
+@{ 
     Layout = null;
 }
 <!DOCTYPE html>
@@ -25,9 +25,14 @@
     <link rel="stylesheet" type="text/css" href="~/Content/Login/css/util.css">
     <link rel="stylesheet" type="text/css" href="~/Content/Login/css/main.css">
     <!--===============================================================================================-->
+
     <script src="https://kit.fontawesome.com/c65d01b037.js" crossorigin="anonymous"></script>
-    <link href="~/Content/alertifyjs/alertify.min.css" rel="stylesheet" />
-    <link href="~/Content/alertifyjs/themes/default.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+
 </head>
 <body>
 
@@ -105,29 +110,6 @@
     </script>
     <!--===============================================================================================-->
     <script src="~/Content/Login/js/main.js"></script>
-    <script src="~/Scripts/alertify.min.js"></script>
 
 </body>
 </html>
-
-@section scripts{
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/jquery");
-    @Scripts.Render("~/bundles/bootstrap");
-    <script>
-        $(function () {
-            var successMessage = '@TempData["SuccessMessage"]'
-            var errorMessage = '@TempData["ErrorMessage"]'
-            if (successMessage != '')
-                alertify.success(successMessage);
-            if (errorMessage != '')
-                alertify.error(errorMessage);
-        });
-
-        function Delete(id) {
-            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este usuario?', function () {
-                window.location.href = '@Url.Action("Delete","Usuarios")/' + id;
-            }, null);
-        }
-    </script>
-}

@@ -26,7 +26,7 @@ namespace EmpresaWEB.Models
 
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Pago")]
-        public Nullable<System.DateTime> FechaPago { get; set; }
+        public DateTime? FechaPago { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio")]
         public string Estado { get; set; }
@@ -39,5 +39,10 @@ namespace EmpresaWEB.Models
 
         [NotMapped]
         public List<mvcPaquete> PaqueteCollection { get; set; }
+
+        public mvcReserva()
+        {
+            FechaRegistro = System.DateTime.Now;
+        }
     }
 }

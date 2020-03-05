@@ -1,5 +1,5 @@
 ﻿@model EmpresaWEB.Models.mvcLogin
-@{ 
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -8,6 +8,7 @@
     <title>Empresa Login</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <!--===============================================================================================-->
     <link rel="icon" type="image/png" href="~/Content/Loginimages/icons/favicon.ico" />
     <link href="~/Content/Login/" />
@@ -27,13 +28,11 @@
     <!--===============================================================================================-->
 
     <script src="https://kit.fontawesome.com/c65d01b037.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-    <script src="sweetalert2.all.min.js"></script>
-    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
-    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
-    <link rel="stylesheet" href="sweetalert2.min.css">
+
 
 </head>
+
+
 <body>
 
     <div class="limiter">
@@ -43,14 +42,18 @@
                     <img src="~/Content/Login/images/img-01.png" alt="IMG">
                 </div>
 
-                @using (Html.BeginForm("Send", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form" }))
+
+
+                @using (Html.BeginForm("Send", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "CreateForm", @class = "login100-form validate-form" }))
+
                 {
+
                     <span class="login100-form-title">
                         Login
                     </span>
 
                     <div class="wrap-input100 validate-input" data-validate="Se requiere un email valido: ex@abc.xyz">
-                        @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "input100", type = "email", placeholder = "Correo", name = "Correo" } })
+                        @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { id = "Correo", @class = "input100", type = "email", placeholder = "Correo", name = "Correo" } })
                         <!--- <input class="input100" type="text" name="email" placeholder="Email">-->
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
@@ -59,7 +62,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Se requiere contraseña">
-                        @Html.EditorFor(model => model.Contraseña, new { htmlAttributes = new { @class = "input100", placeholder = "Contraseña", Type = "password", name = "Contraseña" } })
+                        @Html.EditorFor(model => model.Contraseña, new { htmlAttributes = new { id = "Contraseña", @class = "input100", placeholder = "Contraseña", Type = "password", name = "Contraseña" } })
                         <!-- <input class="input100" type="password" name="pass" place  holder="Password">-->
                         <span class="focus-input100"></span>
                         <span class="symbol-input100">
@@ -68,7 +71,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <input type="submit" value="Login" class="login100-form-btn" />
+                        <input type="submit" value="Login" class="login100-form-btn" id="LoginBtn" @*onclick="validateData()"*@ />
                     </div>
 
                     <div class="text-center p-t-12">
@@ -113,3 +116,53 @@
 
 </body>
 </html>
+
+
+<script>
+    $('form').on('submit', function (e) {
+        e.preventDefault();
+        validateData();
+        return false;
+    });
+    function swalShowLoading() { Swal.showLoading(); }
+
+    function validateData() {
+        if ($("#Correo").val() == "") {
+            Swal.fire('Campo Vacio :(', 'Por favor ingrese un correo', 'error');
+            return false;
+        }
+        else if ($("#Contraseña").val() == "") {
+            Swal.fire('Campo Vacio :(', 'Por favor ingrese una contraseña', 'error');
+            return false;
+        }
+        else {
+            var data = JSON.stringify({
+                'Correo': $('#Correo').val(),
+                'Contraseña': $('#Contraseña').val()
+            });
+            $.ajax({
+                type: "POST",
+                url: "/Login/Send",
+                data: data,
+                contentType: "application/json; charset=utf-8",                
+                beforeSend: function () { swalShowLoading(); },
+                statusCode: {
+                    200: function () {
+                        Swal.fire('Login', 'Inicio de sesion correcto.', 'success').then(function (result) {
+                            if (result) {
+                                location.href = '/Login/Send';
+                            }
+                        });
+                    },
+                    401: function (request, status, error) {
+                        Swal.fire('Creedenciales Incorrectas', 'El email o contraseña son invalidos.', 'error');                        
+                    }                    
+                },
+                error: function (jqXHR, status, error) {
+                    Swal.fire('Error', 'Error del servidor !', 'error'); 
+                }
+            });       
+        return true;
+    }
+    }
+</script>

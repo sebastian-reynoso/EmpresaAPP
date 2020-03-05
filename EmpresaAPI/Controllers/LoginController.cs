@@ -41,17 +41,19 @@ namespace EmpresaAPI.Controllers
             Usuario usuario = db.Usuarios.SingleOrDefault(d => d.Correo == login.Correo);
             bool isCredentialValid = false;
             if (usuario != null)
-                isCredentialValid = (login.Contraseña == usuario.Contraseña);       
-            
+                isCredentialValid = (login.Contraseña == usuario.Contraseña);
+
             if (isCredentialValid)
             {
-                var token = TokenGenerator.GenerateTokenJwt(login.Correo);                
+                var token = TokenGenerator.GenerateTokenJwt(login.Correo);
                 return Ok(token);
             }
             else
             {
                 return Unauthorized();
             }
+                     
+            
         }
     }
 }

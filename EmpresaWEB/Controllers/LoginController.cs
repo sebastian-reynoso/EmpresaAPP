@@ -23,7 +23,7 @@ namespace EmpresaWEB.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Send(string Correo, string Contraseña)
+        public async Task Send(string Correo, string Contraseña)
         {
             mvcLogin login = new mvcLogin();
             login.Correo = Correo;
@@ -31,28 +31,7 @@ namespace EmpresaWEB.Controllers
 
             var tokenBased = string.Empty;
             var client = new HttpClient();
-
-            /*client.DefaultRequestHeaders.Clear();
-            //client.BaseAddress = ;
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var rq = new HttpRequestMessage
-            {
-                RequestUri = new Uri(ConfigurationManager.AppSettings["WebAPIURL"] + "/api/Login/authenticate"),
-                Method = HttpMethod.Post,
-                Content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json")
-            };
-            using(var response = await client.SendAsync(rq))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonString = response.Content.ReadAsStringAsync().Result;
-                    tokenBased = JsonConvert.DeserializeObject<string>(jsonString);
-                    Session["TokenNumber"] = tokenBased;
-                }
-            }
-            client.Dispose();*/
-
+            
             client.DefaultRequestHeaders.Clear();
             client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIURL"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -65,12 +44,21 @@ namespace EmpresaWEB.Controllers
                 client.Dispose();
                 message = false;
                 ViewBag.message = "Bearer " + tokenBased;
-                return View();
+                HttpContext.Response.StatusCode = 200;
             }
-            client.Dispose();
-            message = true;
-            return RedirectToAction("Index");
+            else
+            {
+                HttpContext.Response.StatusCode = 401;
+            }
+            client.Dispose();          
             
         }
+
+        public ActionResult Send()
+        {            
+            return View();
+        }
+
+
     }
 }   

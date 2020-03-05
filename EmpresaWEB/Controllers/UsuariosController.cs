@@ -41,6 +41,7 @@ namespace EmpresaWEB.Controllers
             client.DefaultRequestHeaders.Clear();
             client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIURL"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Session["TokenNumber"].ToString());
             
 
@@ -67,6 +68,7 @@ namespace EmpresaWEB.Controllers
             client.DefaultRequestHeaders.Clear();
             client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIURL"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Session["TokenNumber"].ToString());
             
 

@@ -35,6 +35,7 @@ namespace EmpresaWEB.Controllers
             client.DefaultRequestHeaders.Clear();
             client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIURL"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             var response = await client.PostAsJsonAsync("/api/Login/authenticate", login);
             if (response.IsSuccessStatusCode)
             {

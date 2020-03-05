@@ -148,7 +148,10 @@
                 beforeSend: function () { swalShowLoading(); },
                 statusCode: {
                     200: function () {
-                        Swal.fire('Login', 'Inicio de sesion correcto.', 'success').then(function (result) {
+                       // Swal.fire('Login', 'Inicio de sesion correcto.', 'success')
+                        Swal.fire({
+                            icon: 'success', title: 'Login', text: 'Inicio de sesion correcto.',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`}).then(function (result) {
                             if (result) {
                                 location.href = '/Login/Send';
                             }

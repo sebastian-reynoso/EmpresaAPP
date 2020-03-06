@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="container-login100-form-btn">
-                        <input type="submit" value="Login" class="login100-form-btn" id="LoginBtn" @*onclick="validateData()"*@ />
+                        <input type="submit" value="Login" class="login100-form-btn" id="LoginBtn" />
                     </div>
 
                     <div class="text-center p-t-12">
@@ -84,10 +84,10 @@
                     </div>
 
                     <div class="text-center p-t-136">
-                        <a class="txt2" href="#">
-                            <!--Create your Account
-                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>-->
-                        </a>
+                        @*<a class="txt2" href="#">
+                            Create your Account
+                            <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                        </a>*@
                     </div>
                 }
             </div>
@@ -153,12 +153,15 @@
                             icon: 'success', title: 'Login', text: 'Inicio de sesion correcto.',
                             backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`}).then(function (result) {
                             if (result) {
-                                location.href = '/Login/Send';
+                                location.href = '/Home';
                             }
                         });
                     },
                     401: function (request, status, error) {
-                        Swal.fire('Creedenciales Incorrectas', 'El email o contraseña son invalidos.', 'error');                        
+                        Swal.fire({
+                            icon: 'error', title: 'Login', text: 'Inicio de sesion incorrecto. Verifique Credenciales',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        });                     
                     }                    
                 },
                 error: function (jqXHR, status, error) {

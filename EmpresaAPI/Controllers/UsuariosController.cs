@@ -53,26 +53,37 @@ namespace EmpresaAPI.Controllers
             {
                 return BadRequest();
             }
-
-            db.Entry(usuario).State = EntityState.Modified;
-
-            try
+            
+            var us = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo.ToLower());
+            
+            if (us == null)
             {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsuarioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+               // db.Entry(usuario).State = EntityState.Modified;
 
-            return StatusCode(HttpStatusCode.NoContent);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsuarioExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return StatusCode(HttpStatusCode.NoContent);
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+            
         }
 
         // POST: api/Usuarios
@@ -85,10 +96,19 @@ namespace EmpresaAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Usuarios.Add(usuario);
-            db.SaveChanges();
+            var us = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo.ToLower());
+            if (us == null)
+            {
+                db.Usuarios.Add(usuario);
+                db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = usuario.UsuarioId }, usuario);
+                return CreatedAtRoute("DefaultApi", new { id = usuario.UsuarioId }, usuario);
+            }
+            else
+            {
+                return BadRequest("El email se encuentra en uso");
+            }
+            
         }
 
         // DELETE: api/Usuarios/5

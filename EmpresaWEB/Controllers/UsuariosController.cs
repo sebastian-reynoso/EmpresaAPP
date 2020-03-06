@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace EmpresaWEB.Controllers
 {
@@ -62,7 +63,7 @@ namespace EmpresaWEB.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddOrEdit(mvcUsuario newUsuario)
+        public async Task AddOrEdit(mvcUsuario newUsuario)
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Clear();
@@ -76,18 +77,29 @@ namespace EmpresaWEB.Controllers
             {
                 //HttpResponseMessage response = GlobalVariables.WebApiClient.PostAsJsonAsync("api/Usuarios", newUsuario).Result;                
                 var response = await client.PostAsJsonAsync("api/Usuarios", newUsuario);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 200;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 402;
+                }              
                 client.Dispose();
-                TempData["SuccessMessage"] = "Guardado Satisfactoriamente";
-                return RedirectToAction("Index");
-
             }
             else
             {
                 //HttpResponseMessage response = GlobalVariables.WebApiClient.PutAsJsonAsync("api/Usuarios/" + newUsuario.UsuarioId, newUsuario).Result;                
                 var response = await client.PutAsJsonAsync("api/Usuarios/"+newUsuario.UsuarioId,newUsuario);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 201;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 400;
+                }
                 client.Dispose();
-                TempData["SuccessMessage"] = "Actualizado Satisfactoriamente";
-                return RedirectToAction("Index");
             }            
         }
 
@@ -103,8 +115,9 @@ namespace EmpresaWEB.Controllers
             //HttpResponseMessage response = GlobalVariables.WebApiClient.DeleteAsync("api/Usuarios/"+id.ToString()).Result;            
             var response = await client.DeleteAsync("api/Usuarios/" + id.ToString());
             client.Dispose();
-            TempData["SuccessMessage"] = "Eliminado Satisfactoriamente";
+            Thread.Sleep(1000);
             return RedirectToAction("Index");
+            
         }
     }
 }

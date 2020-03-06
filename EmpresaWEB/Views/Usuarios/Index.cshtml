@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.Correo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contraseña) 
+                @Html.DisplayNameFor(model => model.Contraseña)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Rol)
@@ -66,20 +66,34 @@
     }
 
 </table>
-@section scripts{
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval");
     <script>
-        $(function () {
-            var successMessage = '@TempData["SuccessMessage"]'
-            if (successMessage != '')
-                alertify.success(successMessage);
-        });
 
         function Delete(id) {
-            alertify.confirm('EmpresaAPI: Alerta', 'Esta seguro de eliminar este usuario?', function () {
-                window.location.href = '@Url.Action("Delete","Usuarios")/' + id;
-            }, null);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {  
+                    window.location.href = '@Url.Action("Delete", "Usuarios")/' + id;
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )
+                    
+                }
+            })
         }
     </script>
 }
+
 
 

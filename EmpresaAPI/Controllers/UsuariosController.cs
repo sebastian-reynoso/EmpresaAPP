@@ -53,38 +53,43 @@ namespace EmpresaAPI.Controllers
             {
                 return BadRequest();
             }
-            
-            var us = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo.ToLower());
-            
-            if (us == null)
-            {
-               // db.Entry(usuario).State = EntityState.Modified;
 
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UsuarioExists(id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+            var nuevo = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo.ToLower());
+            var anterior = db.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
 
-                return StatusCode(HttpStatusCode.NoContent);
+            if (anterior.Correo != usuario.Correo)
+            {                
+                if (nuevo != null)
+                {
+                    return BadRequest();
+                }
             }
-            else
+
+            anterior.Nombre = usuario.Nombre;
+            anterior.Apellido = usuario.Apellido;
+            anterior.Correo = usuario.Correo;
+            anterior.Contraseña = usuario.Contraseña;
+            anterior.Rol = usuario.Rol;
+
+
+            try
             {
-                return BadRequest();
+                db.SaveChanges();
             }
-            
-            
-        }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }  
 
         // POST: api/Usuarios
         

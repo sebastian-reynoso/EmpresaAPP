@@ -10,12 +10,14 @@ using System.Web.Mvc;
 using System.Configuration;
 using System.Threading.Tasks;
 using System.Threading;
+using EmpresaWEB.AuthData;
 
 namespace EmpresaWEB.Controllers
 {
     public class UsuariosController : Controller
     {
-         // GET: Usuarios
+        // GET: Usuarios
+        [Auth]
         public async Task<ActionResult> Index()
         {
             var client = new HttpClient();
@@ -36,6 +38,7 @@ namespace EmpresaWEB.Controllers
         }
 
         //[HttpPut]
+        [Auth]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
             var client = new HttpClient();
@@ -62,6 +65,7 @@ namespace EmpresaWEB.Controllers
             
         }
 
+        [Auth]
         [HttpPost]
         public async Task AddOrEdit(mvcUsuario newUsuario)
         {
@@ -103,6 +107,7 @@ namespace EmpresaWEB.Controllers
             }            
         }
 
+        [Auth]
         public async Task<ActionResult> Delete(int id)
         {
             var client = new HttpClient();

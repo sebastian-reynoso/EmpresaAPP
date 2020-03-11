@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmpresaWEB.AuthData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,11 +9,13 @@ namespace EmpresaWEB.Controllers
 {
     public class HomeController : Controller
     {
+        [Auth]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Auth]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -20,6 +23,7 @@ namespace EmpresaWEB.Controllers
             return View();
         }
 
+        [Auth]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

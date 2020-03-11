@@ -1,4 +1,5 @@
-﻿using EmpresaWEB.Models;
+﻿using EmpresaWEB.AuthData;
+using EmpresaWEB.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -15,6 +17,7 @@ namespace EmpresaWEB.Controllers
     public class PaquetesController : Controller
     {
         // GET: Paquetes
+        [Auth]
         public async Task<ActionResult> Index()
         {
             var client = new HttpClient();
@@ -33,6 +36,7 @@ namespace EmpresaWEB.Controllers
             return View("Index", "Login");
         }
 
+        [Auth]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
             var client = new HttpClient();
@@ -56,8 +60,9 @@ namespace EmpresaWEB.Controllers
 
         }
 
+        [Auth]
         [HttpPost]
-        public async Task<ActionResult> AddOrEdit(mvcPaquete newPaquete)
+        public async Task AddOrEdit(mvcPaquete newPaquete)
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Clear();
@@ -68,19 +73,32 @@ namespace EmpresaWEB.Controllers
             if (newPaquete.PaqueteId == 0)
             {
                 var response = await client.PostAsJsonAsync("api/Paquetes", newPaquete);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 200;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 402;
+                }
                 client.Dispose();
-                TempData["SuccessMessage"] = "Guardado Satisfactoriamente";
-                return RedirectToAction("Index");
             }
             else
             {
                 var response = await client.PutAsJsonAsync("api/Paquetes/" + newPaquete.PaqueteId, newPaquete);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 201;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 400;
+                }
                 client.Dispose();
-                TempData["SuccessMessage"] = "Actualizado Satisfactoriamente";
-                return RedirectToAction("Index");
             }
         }
 
+        [Auth]
         public async Task<ActionResult> Delete(int id)
         {
             var client = new HttpClient();
@@ -90,7 +108,8 @@ namespace EmpresaWEB.Controllers
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Session["TokenNumber"].ToString());
 
             var response = await client.DeleteAsync("api/Paquetes/" + id.ToString());
-            TempData["SuccessMessage"] = "Eliminado Satisfactoriamente";
+            client.Dispose();
+            Thread.Sleep(1000);
             return RedirectToAction("Index");
         }
     }

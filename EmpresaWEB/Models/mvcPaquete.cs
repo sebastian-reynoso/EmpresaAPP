@@ -13,6 +13,8 @@ namespace EmpresaWEB.Models
         public mvcPaquete()
         {
             this.Reservas = new HashSet<mvcReserva>();
+            FechaInicio = System.DateTime.Now;
+            FechaFin = System.DateTime.Now;
         }
         [Display(Name = "Paquete")]
         public int PaqueteId { get; set; }
@@ -49,5 +51,6 @@ namespace EmpresaWEB.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<mvcReserva> Reservas { get; set; }
+       
     }
 }

@@ -12,40 +12,40 @@
 </head>
 
 <div class="form-body">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("AddOrEdit", "Reservas", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
     {
         @Html.HiddenFor(model => model.ReservaId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.PaqueteId, "Paquete")
-            @Html.DropDownListFor(model => model.PaqueteId, new SelectList(Model.PaqueteCollection, "PaqueteId", "Titulo"), new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.PaqueteId, new SelectList(Model.PaqueteCollection, "PaqueteId", "Titulo"), new { @class = "form-control", id = "PaqueteId" })
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.UsuarioId, "Usuario")
-            @Html.DropDownListFor(model => model.UsuarioId, new SelectList(Model.UsuarioCollection, "UsuarioId", "Nombre"), new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.UsuarioId, new SelectList(Model.UsuarioCollection, "UsuarioId", "Nombre"), new { @class = "form-control", id = "UsuarioId" })
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.FechaRegistro)
-            @Html.TextBoxFor(model => model.FechaRegistro, "{0:d}", new { @class = "form-control datepicker"})
+            @Html.TextBoxFor(model => model.FechaRegistro, "{0:d}", new { @class = "form-control datepicker", id = "FechaRegistro" })
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.FechaPago)
             @if (Model.FechaPago == null)
             {
-                @Html.TextBoxFor(model => model.FechaPago, "{0:d}", new { @class = "form-control datepicker2"})
+                @Html.TextBoxFor(model => model.FechaPago, "{0:d}", new { @class = "form-control datepicker2", id = "FechaPago" })
             }
             else
             {
-                @Html.TextBoxFor(model => model.FechaPago, "{0:d}", new { @class = "form-control datepicker" })
+                @Html.TextBoxFor(model => model.FechaPago, "{0:d}", new { @class = "form-control datepicker", id = "FechaPago" })
             }
 
 
         </div>
 
-        <div class="form-group">
+        <div class="form-group">            
             @Html.LabelFor(model => model.Estado)
             @{
                 List<SelectListItem> listItems = new List<SelectListItem>();
@@ -54,14 +54,14 @@
                     Text = "No Pagado",
                     Value = "No Pagado",
                     Selected = true
-                }); 
+                });
                 listItems.Add(new SelectListItem
                 {
                     Text = "Pagado",
                     Value = "Pagado"
                 });
             }
-            @Html.DropDownListFor(model => model.Estado, listItems, new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.Estado, listItems, new { @class = "form-control", id = "Estado" })
             @Html.ValidationMessageFor(model => model.Estado)
         </div>
 
@@ -81,16 +81,81 @@
             dateFormat: "dd/mm/yy",
             changeMonth: true,
             changeYear: true,
-            yearRange: "-30:+10"            
+            yearRange: "-30:+10"
         });
 
         $('.datepicker2').datepicker({
             dateFormat: "dd/mm/yy",
             changeMonth: true,
             changeYear: true,
-            yearRange: "-30:+10"            
+            yearRange: "-30:+10"
         }).val(' ');
 
-                
+    </script>
+
+    <script>
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            validateData();
+            return false;
+        });
+        function swalShowLoading() { Swal.showLoading(); }
+
+        function validateData() {
+            var data = JSON.stringify({
+                'ReservaId': $('#ReservaId').val(),
+                'PaqueteId': $('#PaqueteId').val(),
+                'UsuarioId': $('#UsuarioId').val(),
+                'FechaRegistro': $('#FechaRegistro').val(),
+                'FechaPago': $('#FechaPago').val(),
+                'Estado': $('#Estado').val()
+                });
+            $.ajax({
+                type: "POST",
+                url: "/Reservas/AddOrEdit",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function () { swalShowLoading(); },
+                statusCode: {
+                    200: function () {
+                        Swal.fire({
+                            icon: 'success', title: 'Todo en Orden =D', text: 'Registro Exitoso!',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        }).then(function (result) {
+                            if (result) {
+                                location.href = '/Reservas';
+                            }
+                        });
+                    },
+                    201: function () {
+                        Swal.fire({
+                            icon: 'success', title: 'Todo en Orden =D', text: 'Actualizado Exitoso!',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        }).then(function (result) {
+                            if (result) {
+                                location.href = '/Reservas';
+                            }
+                        });
+                    },
+                    400: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error', title: 'Error al actualizar :(', text: error,
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        });
+                    },
+                    402: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error', title: 'Error al registrar :(', text: error,
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        });
+                    }
+                },
+                error: function (jqXHR, status, error) {
+                    Swal.fire('Error', 'Error del servidor !', 'error');
+                }
+            });
+            return true;
+        }
     </script>
 }

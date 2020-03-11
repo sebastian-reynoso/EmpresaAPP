@@ -1,4 +1,5 @@
-﻿using EmpresaWEB.Models;
+﻿using EmpresaWEB.AuthData;
+using EmpresaWEB.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +18,7 @@ namespace EmpresaWEB.Controllers
     public class ReservasController : Controller
     {
         // GET: Reservas
+        [Auth]
         public async Task<ActionResult> Index()
         {
             var client = new HttpClient();
@@ -39,6 +42,7 @@ namespace EmpresaWEB.Controllers
             
         }
 
+        [Auth]
         public async Task<ActionResult> AddOrEdit(int id = 0)
         {
             var client = new HttpClient();
@@ -96,37 +100,47 @@ namespace EmpresaWEB.Controllers
 
         }
 
+        [Auth]
         [HttpPost]
-        public async Task<ActionResult> AddOrEdit(mvcReserva newReserva)
+        public async Task AddOrEdit(mvcReserva newReserva)
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Clear();
             client.BaseAddress = new Uri(ConfigurationManager.AppSettings["WebAPIURL"]);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Session["TokenNumber"].ToString());
-            if (client.DefaultRequestHeaders.Authorization == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
 
             if (newReserva.ReservaId == 0)
             {
                 //HttpResponseMessage response = GlobalVariables.WebApiClient.PostAsJsonAsync("api/Reservas", newReserva).Result;
                 var response = await client.PostAsJsonAsync("api/Reservas", newReserva);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 200;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 402;
+                }
                 client.Dispose();
-                TempData["SuccessMessage"] = "Guardado Satisfactoriamente";
-                return RedirectToAction("Index");
             }
             else
             {
                 //HttpResponseMessage response = GlobalVariables.WebApiClient.PutAsJsonAsync("api/Reservas/" + newReserva.ReservaId, newReserva).Result;
                 var response = await client.PutAsJsonAsync("api/Reservas/" + newReserva.ReservaId, newReserva);
+                if (response.IsSuccessStatusCode)
+                {
+                    HttpContext.Response.StatusCode = 201;
+                }
+                else
+                {
+                    HttpContext.Response.StatusCode = 400;
+                }
                 client.Dispose();
-                TempData["SuccessMessage"] = "Actualizado Satisfactoriamente";
-                return RedirectToAction("Index");
             }
         }
 
+        [Auth]
         public async Task<ActionResult> Delete(int id)
         {
             var client = new HttpClient();
@@ -138,7 +152,7 @@ namespace EmpresaWEB.Controllers
             //HttpResponseMessage response = GlobalVariables.WebApiClient.DeleteAsync("api/Reservas/" + id.ToString()).Result;
             var response = await client.DeleteAsync("api/Reservas/" + id.ToString());
             client.Dispose();
-            TempData["SuccessMessage"] = "Eliminado Satisfactoriamente";
+            Thread.Sleep(1000);
             return RedirectToAction("Index");
         }
     }

@@ -3,44 +3,51 @@
     ViewBag.Title = "AddOrEdit";
 }
 
+    <head>
+        <!-- jQuery UI CSS Reference -->
+        <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+        <!-- Required jQuery and jQuery UI Javascript references -->
+
+
+    </head>
+
 <div class="form-body">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("AddOrEdit", "Paquetes", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
     {
         @Html.HiddenFor(model => model.PaqueteId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Titulo)
-            @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control", placeholder = "Titulo" } })
+            @Html.EditorFor(model => model.Titulo, new { htmlAttributes = new { @class = "form-control", placeholder = "Titulo", id = "Titulo" } })
             @Html.ValidationMessageFor(model => model.Titulo)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Subtitulo)
-            @Html.EditorFor(model => model.Subtitulo, new { htmlAttributes = new { @class = "form-control", placeholder = "Subtitulo" } })
+            @Html.EditorFor(model => model.Subtitulo, new { htmlAttributes = new { @class = "form-control", placeholder = "Subtitulo", id = "Subtitulo" } })
             @Html.ValidationMessageFor(model => model.Subtitulo)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Descripcion)
-            @Html.TextAreaFor(model => model.Descripcion, 10, 80, new { htmlAttributes = new { @class = "form-control", placeholder = "Descripcion" } })
+            @Html.TextAreaFor(model => model.Descripcion, 10, 80, new { htmlAttributes = new { @class = "form-control", placeholder = "Descripcion", id = "Descripcion" } })
             @Html.ValidationMessageFor(model => model.Descripcion)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Restricciones)
-            @Html.TextAreaFor(model => model.Restricciones, 10, 80, new { htmlAttributes = new { @class = "form-control", placeholder = "Restricciones" } })
+            @Html.TextAreaFor(model => model.Restricciones, 10, 80, new { htmlAttributes = new { @class = "form-control", placeholder = "Restricciones", id = "Restricciones" } })
             @Html.ValidationMessageFor(model => model.Restricciones)
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.FechaInicio)
-            @Html.TextBoxFor(model => model.FechaInicio, "{0:dd-MM-yyyy}", new { @class = "form-control", @type = "date", Value=System.DateTime.Now })
+            @Html.TextBoxFor(model => model.FechaInicio, "{0:d}", new { @class = "form-control datepicker", id = "FechaInicio" })
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.FechaFin)
-            @Html.TextBoxFor(model => model.FechaFin, "{0:dd-MM-yyyy}", new { @class = "form-control", @type = "date", Value=System.DateTime.Now })
-            @Html.ValidationMessageFor(model => model.FechaFin)
+            @Html.TextBoxFor(model => model.FechaFin, "{0:d}", new { @class = "form-control datepicker", id = "FechaFin" })
         </div>
 
         <div class="form-group">
@@ -59,7 +66,7 @@
                     Value = "Ocupado"
                 });
             }
-            @Html.DropDownListFor(model => model.Estado, listItems, new { @class = "form-control" })
+            @Html.DropDownListFor(model => model.Estado, listItems, new { @class = "form-control", id = "Estado" })
             @Html.ValidationMessageFor(model => model.Estado)
         </div>
 
@@ -72,6 +79,94 @@
 
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval");
-    
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script type="text/javascript">
+
+        $('.datepicker').datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-30:+10"
+        });
+
+        $('.datepicker2').datepicker({
+            dateFormat: "dd/mm/yy",
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-30:+10"
+        }).val(' ');
+
+
+    </script>
+
+    <script>
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            validateData();
+            return false;
+        });
+        function swalShowLoading() { Swal.showLoading(); }
+
+        function validateData() {
+            var data = JSON.stringify({
+                'PaqueteId': $('#PaqueteId').val(),
+                'Titulo': $('#Titulo').val(),
+                'Subtitulo': $('#Subtitulo').val(),
+                'Descripcion': $('#Descripcion').val(),
+                'Restricciones': $('#Restricciones').val(),
+                'FechaInicio': $('#FechaInicio').val(),
+                'FechaFin': $('#FechaFin').val(),
+                'Estado': $('#Estado').val()
+            });
+            $.ajax({
+                type: "POST",
+                url: "/Paquetes/AddOrEdit",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function () { swalShowLoading(); },
+                statusCode: {
+                    200: function () {
+                        Swal.fire({
+                            icon: 'success', title: 'Todo en Orden =D', text: 'Registro Exitoso!',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        }).then(function (result) {
+                            if (result) {
+                                location.href = '/Paquetes';
+                            }
+                        });
+                    },
+                    201: function () {
+                        Swal.fire({
+                            icon: 'success', title: 'Todo en Orden =D', text: 'Actualizado Exitoso!',
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        }).then(function (result) {
+                            if (result) {
+                                location.href = '/Paquetes';
+                            }
+                        });
+                    },
+                    400: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error', title: 'Error al actualizar :(', text: error,
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        });
+                    },
+                    402: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error', title: 'Error al registrar :(', text: error,
+                            backdrop: `rgba(0,0,123,0.4) url("https://sweetalert2.github.io/images/nyan-cat.gif") left top repeat`
+                        });
+                    }
+                },
+                error: function (jqXHR, status, error) {
+                    Swal.fire('Error', 'Error del servidor !', 'error');
+                }
+            });
+            return true;
+        }
+    </script>
+
 }
 
